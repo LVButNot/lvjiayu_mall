@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lvjiayu.mall.dao.MallUserTokenMapper">
+    <resultMap id="BaseResultMap" type="com.lvjiayu.mall.entity.MallUserToken">
+        <id column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="token" jdbcType="VARCHAR" property="token" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        user_id, token, update_time, expire_time
+    </sql>
+    <select id="selectByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_newbee_mall_user_token
+        where token = #{token,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
