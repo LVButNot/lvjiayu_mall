@@ -1,6 +1,7 @@
 package com.lvjiayu.mall.controller.admin;
 
 import com.lvjiayu.mall.config.annotation.TokenToAdminUser;
+import com.lvjiayu.mall.controller.mall.vo.OrderDetailVo;
 import com.lvjiayu.mall.entity.AdminUserToken;
 import com.lvjiayu.mall.service.OrderService;
 import com.lvjiayu.mall.util.PageQueryUtil;
@@ -59,7 +60,10 @@ public class AdminOrderController {
      */
     @GetMapping("/orders/{orderId}")
     @ApiOperation(value = "订单详情接口", notes = "传参为订单号")
-    public Result<>
+    public Result<OrderDetailVo> info(@ApiParam(value = "订单号") @PathVariable("orderId") Long orderId, @TokenToAdminUser AdminUserToken adminUserToken){
+        logger.info("adminUser:{}", adminUserToken.toString());
+        return ResultGenerator.genSuccessResult(orderService.getOrderDetailByOrderId(orderId));
+    }
 
     /**
      * 配货

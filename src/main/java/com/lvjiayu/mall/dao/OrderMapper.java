@@ -9,4 +9,6 @@ public interface OrderMapper {
     List<MallOrder> findMallOrderList(PageQueryUtil pageUtil);
 
     int getTotalOrders(PageQueryUtil pageUtil);
+
+    MallOrder selectByPrimaryKey(Long orderId);
 }
