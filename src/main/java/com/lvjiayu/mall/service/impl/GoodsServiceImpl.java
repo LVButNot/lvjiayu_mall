@@ -48,4 +48,9 @@ public class GoodsServiceImpl implements GoodsService {
         PageResult pageResult = new PageResult(list, total, pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
+
+    @Override
+    public boolean batchUpdateSellStatus(Long[] ids, Integer status) {
+        return goodsMapper.batchUpdateSellStatus(ids, status) > 0;
+    }
 }

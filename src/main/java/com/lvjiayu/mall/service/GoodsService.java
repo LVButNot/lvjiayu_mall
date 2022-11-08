@@ -12,4 +12,6 @@ public interface GoodsService {
     String updateMallGoods(MallGoods mallGoods);
 
     PageResult getGoodsPage(PageQueryUtil pageUtil);
+
+    boolean batchUpdateSellStatus(Long[] ids, Integer status);
 }

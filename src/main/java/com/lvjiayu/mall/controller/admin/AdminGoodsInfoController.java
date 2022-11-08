@@ -1,7 +1,9 @@
 package com.lvjiayu.mall.controller.admin;
 
+import com.lvjiayu.mall.common.Constants;
 import com.lvjiayu.mall.common.ServiceResultEnum;
 import com.lvjiayu.mall.config.annotation.TokenToAdminUser;
+import com.lvjiayu.mall.controller.admin.param.BatchIdParam;
 import com.lvjiayu.mall.controller.admin.param.GoodsAddParam;
 import com.lvjiayu.mall.controller.admin.param.GoodsEditParam;
 import com.lvjiayu.mall.entity.AdminUserToken;
@@ -16,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +74,7 @@ public class AdminGoodsInfoController {
     /**
      * 商品列表（分页）
      */
-    @GetMapping("/goods")
+    @GetMapping("/goods/list")
     @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
     public Result list(@RequestParam(required = false) @ApiParam(value = "页码") Integer pageNumber,
                        @RequestParam(required = false) @ApiParam(value = "每条页数") Integer pageSize,
@@ -93,5 +96,24 @@ public class AdminGoodsInfoController {
         }
         PageQueryUtil pageUtil = new PageQueryUtil(params);
         return ResultGenerator.genSuccessResult(goodsService.getGoodsPage(pageUtil));
+    }
+
+    /**
+     * 批量上下架
+     */
+    @PutMapping("/goods/status/{status}")
+    @ApiOperation(value = "批量修改销售状态", notes = "批量修改销售状态")
+    public Result delete(@RequestBody BatchIdParam batchIdParam, @PathVariable("status") int status, @TokenToAdminUser AdminUserToken adminUserToken){
+        logger.info("adminUser:{}", adminUserToken.toString());
+        if(ObjectUtils.isEmpty(batchIdParam) || batchIdParam.getIds().length < 1){
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        if(status != Constants.SELL_STATUS_DOWN && status != Constants.SELL_STATUS_UP){
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        if(goodsService.batchUpdateSellStatus(batchIdParam.getIds(), status)){
+            return ResultGenerator.genSuccessResult();
+        }
+        return ResultGenerator.genFailResult("修改失败");
     }
 }

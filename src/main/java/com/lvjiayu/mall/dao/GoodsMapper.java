@@ -16,4 +16,6 @@ public interface GoodsMapper {
     List<MallGoods> findGoodsList(PageQueryUtil pageUtil);
 
     int getTotalGoods(PageQueryUtil pageUtil);
+
+    int batchUpdateSellStatus(Long[] ids, Integer status);
 }
