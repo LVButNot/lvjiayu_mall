@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * @author Program Monkey
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PageQueryUtil extends LinkedHashMap<String, Object> {

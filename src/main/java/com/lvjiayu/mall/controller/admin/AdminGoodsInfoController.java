@@ -8,16 +8,21 @@ import com.lvjiayu.mall.entity.AdminUserToken;
 import com.lvjiayu.mall.entity.MallGoods;
 import com.lvjiayu.mall.service.GoodsService;
 import com.lvjiayu.mall.util.BeanUtil;
+import com.lvjiayu.mall.util.PageQueryUtil;
 import com.lvjiayu.mall.util.Result;
 import com.lvjiayu.mall.util.ResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -61,5 +66,32 @@ public class AdminGoodsInfoController {
         }else{
             return ResultGenerator.genFailResult(result);
         }
+    }
+
+    /**
+     * 商品列表（分页）
+     */
+    @GetMapping("/goods")
+    @ApiOperation(value = "商品列表", notes = "可根据名称和上架状态筛选")
+    public Result list(@RequestParam(required = false) @ApiParam(value = "页码") Integer pageNumber,
+                       @RequestParam(required = false) @ApiParam(value = "每条页数") Integer pageSize,
+                       @RequestParam(required = false) @ApiParam(value = "商品名称") String goodsName,
+                       @RequestParam(required = false) @ApiParam(value = "上架状态 0-上架 1-下架") Integer goodsSellStatus,
+                       @TokenToAdminUser AdminUserToken adminUserToken){
+        logger.info("adminUser:{}", adminUserToken.toString());
+        if(pageNumber == null || pageNumber < 1 || pageSize == null || pageSize < 10){
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        Map params = new HashMap(8);
+        params.put("page",pageNumber);
+        params.put("limit", pageSize);
+        if(StringUtils.hasText(goodsName)){
+            params.put("goodsName", goodsName);
+        }
+        if(goodsSellStatus != null){
+            params.put("goodsSellStatus", goodsSellStatus);
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return ResultGenerator.genSuccessResult(goodsService.getGoodsPage(pageUtil));
     }
 }
