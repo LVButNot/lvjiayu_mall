@@ -8,4 +8,10 @@ public interface OrderService {
     PageResult getOrdersPage(PageQueryUtil pageUtil);
 
     OrderDetailVo getOrderDetailByOrderId(Long orderId);
+
+    String checkDone(Long[] ids);
+
+    String checkOut(Long[] ids);
+
+    String closeOrder(Long[] ids);
 }

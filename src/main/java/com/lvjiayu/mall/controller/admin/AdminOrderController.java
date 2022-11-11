@@ -1,6 +1,8 @@
 package com.lvjiayu.mall.controller.admin;
 
+import com.lvjiayu.mall.common.ServiceResultEnum;
 import com.lvjiayu.mall.config.annotation.TokenToAdminUser;
+import com.lvjiayu.mall.controller.admin.param.BatchIdParam;
 import com.lvjiayu.mall.controller.mall.vo.OrderDetailVo;
 import com.lvjiayu.mall.entity.AdminUserToken;
 import com.lvjiayu.mall.service.OrderService;
@@ -16,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.awt.image.RGBImageFilter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,14 +71,54 @@ public class AdminOrderController {
     /**
      * 配货
      */
+    @PutMapping("/orders/checkDone")
+    @ApiOperation(value = "修改订单为配货成功", notes = "批量修改")
+    public Result checkDone(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser AdminUserToken adminUserToken){
+        logger.info("adminUser:{}", adminUserToken.toString());
+        if(batchIdParam == null || batchIdParam.getIds().length < 1){
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        String result = orderService.checkDone(batchIdParam.getIds());
+        if(ServiceResultEnum.SUCCESS.getResult().equals(result)){
+            return ResultGenerator.genSuccessResult();
+        }
+        return ResultGenerator.genFailResult(result);
+    }
 
     /**
      * 出库
      */
+    @PutMapping("/orders/checkOut")
+    @ApiOperation(value = "修改订单为配货成功", notes = "批量修改")
+    public Result checkOut(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser AdminUserToken adminUserToken){
+        logger.info("adminUser:{}", adminUserToken.toString());
+        if(batchIdParam == null || batchIdParam.getIds().length < 1){
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        String result = orderService.checkOut(batchIdParam.getIds());
+        if(ServiceResultEnum.SUCCESS.getResult().equals(result)){
+            return ResultGenerator.genSuccessResult();
+        }
+        return ResultGenerator.genFailResult(result);
+    }
 
     /**
      * 关闭订单
      */
+    @PutMapping("/orders/close")
+    @ApiOperation(value = "修改订单为商家关闭", notes = "批量修改")
+    public Result closeOrder(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser AdminUserToken adminUserToken){
+        logger.info("adminUser:{}", adminUserToken.toString());
+        if(batchIdParam == null || batchIdParam.getIds().length < 1){
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        String result = orderService.closeOrder(batchIdParam.getIds());
+        if(ServiceResultEnum.SUCCESS.getResult().equals(result)){
+            return ResultGenerator.genSuccessResult();
+        }
+        return ResultGenerator.genFailResult(result);
+    }
+
 
 
 }
