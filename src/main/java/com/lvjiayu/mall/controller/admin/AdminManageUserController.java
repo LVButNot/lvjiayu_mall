@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Date;
 
 @RestController
 @Api(value = "v1", tags = "后台管理系统管理员模块接口")
@@ -36,6 +37,7 @@ public class AdminManageUserController {
      */
     @PostMapping("/adminUser/login")
     public Result<String> login(@RequestBody @Valid AdminLoginParam adminLoginParam){
+        logger.info("尝试登陆后端管理系统，时间为：{}", new Date().getTime());
         if (adminLoginParam == null
              || !StringUtils.hasText(adminLoginParam.getUserName())
              || !StringUtils.hasText(adminLoginParam.getPasswordMp5())) {
